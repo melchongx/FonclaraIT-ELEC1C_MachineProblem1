@@ -1,0 +1,44 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.infoFormContainer {
+    margin: auto;
+    min-width: fit-content;
+    max-width: 50%;
+    height: fit-content;
+    padding: 2%;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.infoForm {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.infoFormEntry {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.infoFormEntry label, input, select{
+    width:200px;
+    height: 30px;
+}
