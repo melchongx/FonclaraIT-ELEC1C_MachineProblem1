@@ -42,3 +42,8 @@ body {
     width:200px;
     height: 30px;
 }
+
+.flexBR {
+    flex-basis: 100%;
+    height: 20px;
+}

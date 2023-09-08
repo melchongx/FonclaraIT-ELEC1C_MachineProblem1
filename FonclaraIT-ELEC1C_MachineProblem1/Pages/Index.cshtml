@@ -8,11 +8,50 @@
     var Birthday = "";
     Boolean isTenured;
     int SalaryPerHour;
-    string email;
+    string SalPH;
+    string Email;
+
+    try
+    {
+        if (HttpMethods.IsPost(Request.Method))
+        {
+            FirstName = Request.Form["fName"];
+            LastName = Request.Form["lName"];
+            Birthday = Request.Form["bDay"];
+            var Status = Request.Form["isTenured"];
+            if (Status.Equals("Probationary"))
+            {
+                isTenured = false;
+            }
+            else if (Status.Equals("Permanent"))
+            {
+                isTenured = true;
+            }
+            else { }
+            SalPH = Request.Form["salPerHour"];
+            if (int.TryParse(SalPH, out SalaryPerHour)) ;
+            Email = Request.Form["emailAdd"];
+
+            <text>
+                You entered: <br />
+                First Name: @FirstName <br />
+                Last Name: @LastName <br />
+                Birthday: @Birthday <br />
+                Status: @Status <br />
+                Salary per Hour: @SalaryPerHour <br />
+                Email: @Email <br />
+            </text>
+
+
+        }
+    } catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
 }
 
 <section class="infoFormContainer">
-    <form class="infoForm">
+    <form class="infoForm" method="post">
         <div class="infoFormEntry">
             <label for="fName">First Name:</label>
             <input type="text" id="fName" name="fname" />
@@ -28,8 +67,8 @@
         <div class="infoFormEntry">
             <label for="isTenured">Status:</label>
             <select id="isTenured" name="isTenured">
-                <option value="probationary">Probationary</option>
-                <option value="permanent">Permanent</option>
+                <option value="Probationary">Probationary</option>
+                <option value="Permanent">Permanent</option>
             </select>
         </div>
         <div class="infoFormEntry">
@@ -40,9 +79,8 @@
             <label for="emailAdd">Email:</label>
             <input type="email" id="emailAdd" name="emailAdd" />
         </div>
-        <div class="infoFormEntry">
-            <button type="submit">Submit</button>
+        <div class="flexBR"></div>
+            <button type="submit" name="submit">Submit</button>
             <button type="reset">Reset</button>
-        </div>
     </form>
 </section>
