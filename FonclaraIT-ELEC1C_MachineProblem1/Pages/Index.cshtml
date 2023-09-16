@@ -6,10 +6,12 @@
     var FirstName = "";
     var LastName = "";
     var Birthday = "";
-    Boolean isTenured;
-    int SalaryPerHour;
-    string SalPH;
-    string Email;
+    Boolean isTenured = true;
+    int SalaryPerHour = 0;
+    string SalPH = "";
+    string Email = "";
+    int PrelimGrade = 0;
+    int FinalGrade = 0;
 
     try
     {
@@ -29,19 +31,10 @@
             }
             else { }
             SalPH = Request.Form["salPerHour"];
-            if (int.TryParse(SalPH, out SalaryPerHour)) ;
+            if (int.TryParse(SalPH, out SalaryPerHour));
             Email = Request.Form["emailAdd"];
-
-            <text>
-                You entered: <br />
-                First Name: @FirstName <br />
-                Last Name: @LastName <br />
-                Birthday: @Birthday <br />
-                Status: @Status <br />
-                Salary per Hour: @SalaryPerHour <br />
-                Email: @Email <br />
-            </text>
-
+            PrelimGrade = int.Parse(Request.Form["prelimGrade"]);
+            FinalGrade = int.Parse(Request.Form["finalGrade"]);
 
         }
     } catch (Exception e)
@@ -50,7 +43,7 @@
     }
 }
 
-<section class="infoFormContainer">
+<div class="infoFormContainer">
     <form class="infoForm" method="post">
         <div class="infoFormEntry">
             <label for="fName">First Name:</label>
@@ -73,14 +66,147 @@
         </div>
         <div class="infoFormEntry">
             <label for="salPerHour">Salary per Hour:</label>
-            <input type="text" id="salPerHour" name="salPerHour" />
+            <input type="number" id="salPerHour" name="salPerHour" />
         </div>
         <div class="infoFormEntry">
             <label for="emailAdd">Email:</label>
             <input type="email" id="emailAdd" name="emailAdd" />
         </div>
+        <div class="infoFormEntry">
+            <label for="prelimGrade">Prelim Grade:</label>
+            <input type="number" id="prelimGrade" name="prelimGrade" />
+        </div>
+        <div class="infoFormEntry">
+            <label for="finalGrade">Final Grade:</label>
+            <input type="number" id="finalGrade" name="finalGrade" />
+        </div>
         <div class="flexBR"></div>
             <button type="submit" name="submit">Submit</button>
             <button type="reset">Reset</button>
     </form>
-</section>
+
+    <div class="displayResults">
+        <div>
+            @{
+                try
+                {
+                    DateTime Today = DateTime.Today;
+                    string[] BdaySplit = Birthday.Split('-');
+                    DateTime Bday = new DateTime(int.Parse(BdaySplit[0]), int.Parse(BdaySplit[1]), int.Parse(BdaySplit[2]));
+                    TimeSpan value = Today.Subtract(Bday);
+                    var AgeYears = (value.Days / 365);
+                    var AgeMonths = (value.Days / 30);
+                    if (AgeYears < 1)
+                    {
+                        if (AgeMonths <= 1)
+                        {
+                            <p>I am @FirstName @LastName and I am @AgeMonths month old.</p>
+                        }
+                        else if (AgeMonths == 12)
+                        {
+                            <p>I am @FirstName @LastName and I am 11 months old.</p>
+                        }
+                        else
+                        {
+                            <p>I am @FirstName @LastName and I am @AgeMonths months old.</p>
+                        }
+                    }
+                    else if (AgeYears < 2)
+                    {
+                        <p>I am @FirstName @LastName and I am @AgeYears year old.</p>
+                    }
+                    else
+                    {
+                        <p>I am @FirstName @LastName and I am @AgeYears years old.</p>
+                    }
+                }
+                catch { }
+            }
+        </div>
+        <div>
+            @{
+                string[] StrEmail = Email.Split("@");
+            }
+
+            <p>Email: <a href="mailto: @Email">@Email</a></p>
+            <p>Domain: @StrEmail[1]</p>
+            <p>Username: @StrEmail[0]</p>
+
+        </div>
+        <div>
+            @{
+                int SalaryPerDay = SalaryPerHour * 8;
+                int SalaryPerMonth = SalaryPerDay * 30;
+                if (isTenured) { SalaryPerMonth += 500; }
+
+                <p>Name: @FirstName @LastName</p>
+                <p>Email: @Email</p>
+                <p>Daily Salary: $@SalaryPerDay</p>
+                <p>Monthly Salary: $@SalaryPerMonth</p>
+                
+            }
+        </div>
+        <div>
+            @{
+                int SemGrade = (PrelimGrade + FinalGrade) / 2;
+                double TransGrade = 0.00;
+                if (SemGrade < 75)
+                {
+                    TransGrade = 5.00;
+                } else if (SemGrade < 79) 
+                {
+                    TransGrade = 3.00;
+                } else if (SemGrade < 82)
+                {
+                    TransGrade = 2.75;    
+                } else if (SemGrade < 84)
+                {
+                    TransGrade = 2.50;
+                } else if (SemGrade < 87)
+                {
+                    TransGrade = 2.25;
+                } else if (SemGrade < 89)
+                {
+                    TransGrade = 2.00;
+                } else if (SemGrade < 92)
+                {
+                    TransGrade = 1.75;
+                } else if (SemGrade < 94)
+                {
+                    TransGrade = 1.50;
+                } else if (SemGrade < 96)
+                {
+                    TransGrade = 1.25;
+                } else
+                {
+                    TransGrade = 1.00;
+                }
+
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <td>@FirstName @LastName</td>
+                    </tr>
+                    <tr>
+                        <th>Prelim</th>
+                        <td>@PrelimGrade</td>
+                    </tr>
+                    <tr>
+                        <th>Final</th>
+                        <td>@FinalGrade</td>
+                    </tr>
+                    <tr>
+                        <th>Semestral Grade</th>
+                        <td>@SemGrade</td>
+                    </tr>
+                    <tr>
+                        <th>Transmuted Grade</th>
+                        <td>@TransGrade</td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+
+    
+</div>
